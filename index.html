@@ -41,7 +41,7 @@
                   <p class="u-align-justify u-custom-font u-font-lato u-small-text u-text u-text-variant u-text-white u-text-3"> Sua tarefa é analisar e classificar cada proposta com base em sua adequação e relevância para os desafios propostos. Considerando os seguintes pontos:&nbsp;&nbsp;<br>
                   </p>
                   <div class="u-align-center u-expanded-width-xs u-form u-form-checks-spacing-23 u-form-radios-spacing-51 u-radius-50 u-white u-form-1">
-                    <form class="u-clearfix u-form-spacing-16 u-form-vertical u-inner-form" source="email" name="form" style="padding: 34px;" form id="meuFormulario" onsubmit="enviarEmail(); return false;">
+                    <form class="u-clearfix u-form-spacing-16 u-form-vertical u-inner-form" source="email" name="form" style="padding: 34px;" id="meuFormulario" onsubmit="enviarEmail(); return false;">
                       <div class="u-form-group u-form-select u-form-group-1">
                         <label for="select-1115" class="u-custom-font u-font-lato u-label u-label-1">Equipes</label>
                         <div class="u-form-select-wrapper">
@@ -154,7 +154,7 @@
                         </div>
                       </div>
                       <div class="u-align-center u-form-group u-form-submit">
-                        <button type="button" class="u-border-none u-btn u-btn-submit u-button-style u-custom-font u-font-lato u-radius-30 u-btn-1" onclick="handleSubmit()">Enviar</button>
+                        <button type="submit" class="u-border-none u-btn u-btn-submit u-button-style u-custom-font u-font-lato u-radius-30 u-btn-1">Enviar</button>
                         <input type="submit" value="submit" class="u-form-control-hidden" wfd-invisible="true">
                       </div>
                       <div class="u-form-send-message u-form-send-success" id="success-message" style="display:none;">Enviado com sucesso! Obrigado!</div>
@@ -170,21 +170,13 @@
         </div>
       </div>
     </section>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-      function handleSubmit() {
-        // Simulação de sucesso ou erro
-        const isSuccess = true; // Modifique esta variável para testar o sucesso ou o erro
-    
-        if (isSuccess) {
-          document.getElementById("success-message").style.display = "block";
-          document.getElementById("error-message").style.display = "none";
-        } else {
-          document.getElementById("success-message").style.display = "none";
-          document.getElementById("error-message").style.display = "block";
-        }
-      }
-    </script>
-    <script>
+      (function() {
+        // Inicialize o EmailJS com seu ID de usuário
+        emailjs.init('user_xxxxx'); // substitua pelo seu User ID do EmailJS
+      })();
+      
       function enviarEmail() {
         // Coletando os dados do formulário
         const templateParams = {
@@ -196,13 +188,17 @@
             Pitch: ${document.querySelector('input[name="checkbox-2"]:checked').value}
           `
         };
-
+    
         // Enviando o e-mail usando EmailJS
         emailjs.send('service_foxycw6', 'template_oy4ojq6', templateParams)
           .then(function(response) {
             alert('Email enviado com sucesso!');
+            document.getElementById("success-message").style.display = "block";
+            document.getElementById("error-message").style.display = "none";
           }, function(error) {
             alert('Erro ao enviar o email: ' + JSON.stringify(error));
+            document.getElementById("success-message").style.display = "none";
+            document.getElementById("error-message").style.display = "block";
           });
       }
     </script>
