@@ -6,9 +6,7 @@
     <meta name="description" content="">
     <title>Contato</title>
     <link rel="stylesheet" href="nicepage.css" media="screen">
-<link rel="stylesheet" href="index.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <link rel="stylesheet" href="index.css" media="screen">
     <meta name="generator" content="Nicepage 6.16.5, nicepage.com">
     <meta name="referrer" content="origin">
     <link rel="icon" href="images/Hackathon.jpg">
@@ -21,7 +19,7 @@
 		"@context": "http://schema.org",
 		"@type": "Organization",
 		"name": "Site1"
-}</script>
+    }</script>
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="Contato">
     <meta property="og:description" content="">
@@ -41,14 +39,14 @@
                   <p class="u-align-justify u-custom-font u-font-lato u-small-text u-text u-text-variant u-text-white u-text-3"> Sua tarefa é analisar e classificar cada proposta com base em sua adequação e relevância para os desafios propostos. Considerando os seguintes pontos:&nbsp;&nbsp;<br>
                   </p>
                   <div class="u-align-center u-expanded-width-xs u-form u-form-checks-spacing-23 u-form-radios-spacing-51 u-radius-50 u-white u-form-1">
-                    <form class="u-clearfix u-form-spacing-16 u-form-vertical u-inner-form" source="email" name="form" style="padding: 34px;" id="meuFormulario" onsubmit="enviarEmail(); return false;">
+                    <form id="myForm" class="u-clearfix u-form-spacing-16 u-form-vertical u-inner-form" name="myForm" style="padding: 34px;">
                       <div class="u-form-group u-form-select u-form-group-1">
                         <label for="select-1115" class="u-custom-font u-font-lato u-label u-label-1">Equipes</label>
                         <div class="u-form-select-wrapper">
-                          <select id="select-1115" name="select" class="u-border-none u-input u-input-rectangle u-radius u-input-1">
-                            <option value="Equipe1" data-calc="">Equipe 1</option>
-                            <option value="Equipe 2" data-calc="">Equipe 2</option>
-                            <option value="Equipe 3" data-calc="">Equipe 3</option>
+                          <select id="select-1115" name="select-1115" class="u-border-none u-input u-input-rectangle u-radius u-input-1">
+                            <option value="Equipe 1" data-calc="1">Equipe 1</option>
+                            <option value="Equipe 2" data-calc="2">Equipe 2</option>
+                            <option value="Equipe 3" data-calc="3">Equipe 3</option>
                           </select>
                           <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                         </div>
@@ -79,7 +77,7 @@
                         </div>
                       </div>
                       <div class="u-form-group u-form-input-layout-horizontal u-form-radiobutton u-form-group-3">
-                        <label class="u-custom-font u-font-lato u-label u-label-3">Escabilidade</label>
+                        <label class="u-custom-font u-font-lato u-label u-label-3">Escalabilidade</label>
                         <div class="u-form-radio-button-wrapper">
                           <div class="u-input-row">
                             <input id="field-a597" type="radio" name="checkbox" value="1" class="u-field-input" data-calc="1">
@@ -170,33 +168,52 @@
         </div>
       </div>
     </section>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-    </script>
-    <script type="text/javascript">
-      (function(){
-          emailjs.init({
-            publicKey: "Oa7GD4tazw7J7lOPR",
-          });
-      })();
-      function enviarEmail() {
-        const templateParams = {
-          mensagem: `
-            Equipe: ${document.getElementById('select-1115').value} \n
-            Viabilidade: ${document.querySelector('input[name="checkbox-20"]:checked').value} \n
-            Escalabilidade: ${document.querySelector('input[name="checkbox"]:checked').value} \n
-            Impacto: ${document.querySelector('input[name="checkbox-1"]:checked').value} \n
-            Pitch: ${document.querySelector('input[name="checkbox-2"]:checked').value}
-          `
-        };
+    <script>
+      document.getElementById('myForm').addEventListener('submit', async function(event) {
+          event.preventDefault(); // Previne o comportamento padrão do formulário
 
-        emailjs.send('service_foxycw6', 'template_oy4ojq6', templateParams)
-          .then(function(response) {
-            alert('Email enviado com sucesso!');
-          }, function(error) {
-            alert('Erro ao enviar o email: ' + JSON.stringify(error));
-          });
-      }
+          function getRadioValue(name) {
+              const radios = document.getElementsByName(name);
+              for (let radio of radios) {
+                  if (radio.checked) {
+                      return radio.value;
+                  }
+              }
+              return ''; // Retorna vazio se nenhum valor for selecionado
+          }
+
+          const formData = {
+              equipe: document.getElementById('select-1115').value,
+              viabilidade: getRadioValue('checkbox-20'),
+              escalabilidade: getRadioValue('checkbox'),
+              impacto: getRadioValue('checkbox-1'),
+              pitch: getRadioValue('checkbox-2')
+          };
+
+          try {
+              const response = await fetch('https://script.google.com/macros/s/AKfycbxLyZQUV1wHprubpyxSFjDAqjR16bJtYvEgNlM2mPgSdkPg3MN46i588f66KnA2xstF0w/exec', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  mode: 'no-cors',  // Utilizando 'no-cors'
+                  body: JSON.stringify(formData)
+              });
+
+              // Supondo que a requisição foi bem-sucedida
+              alert('Formulário enviado com sucesso! Obrigado pela sua participação.');
+              document.getElementById('myForm').reset();
+          
+          } catch (error) {
+              console.error('Erro ao enviar o formulário:', error);
+              alert('Ocorreu um erro ao enviar o formulário. Tente novamente.');
+          }
+      });
+
     </script>
+    
+    
+    
+    
     
 </body></html>
